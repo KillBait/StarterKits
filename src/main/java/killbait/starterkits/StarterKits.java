@@ -10,10 +10,12 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import killbait.starterkits.common.EntityEventHandler;
 import killbait.starterkits.common.item.ItemKitCreator;
-import killbait.starterkits.common.proxy.Proxy;
+import killbait.starterkits.common.proxy.CommonProxy;
+import killbait.starterkits.common.utils.LogHelper;
+import killbait.starterkits.common.utils.Reference;
 import net.minecraft.item.Item;
 
-@Mod(modid="StarterKits", name="StarterKits", version="1.7.2-0.1")
+@Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.MOD_VERSION)
 
 public class StarterKits {
 
@@ -21,15 +23,13 @@ public class StarterKits {
     @Mod.Instance("StarterKits")
     public static StarterKits instance;
 
-    /* Create the proxies we need
-    * TODO:
-    * Is this rearly needed ????? Remove if not
-    */
+    /* Resister our proxy classes */
 
-    @SidedProxy(clientSide = "killbait.starterkits.common.proxy.ProxyClient", serverSide = "killbait.starterkits.common.proxy.ProxyServer")
-    public static Proxy proxy;
+    @SidedProxy(clientSide = "killbait.starterkits.common.proxy.ClientProxy", serverSide = "killbait.starterkits.common.proxy.CommonProxy")
+    public static CommonProxy proxy;
 
-    /* */
+    /* Define our items*/
+
     public static Item kitCreator;
 
     /* Register the preInit Handler */
@@ -37,9 +37,11 @@ public class StarterKits {
     @Mod.EventHandler
     public void  preInit(FMLPreInitializationEvent event)
     {
+        // Register our items
         kitCreator = new ItemKitCreator();
         GameRegistry.registerItem(kitCreator,"kitCreator");
-        FMLLog.info("[StarterKits]: ".concat("preInit finished"));
+
+        LogHelper.info("preInit Finished");
 
     }
 
