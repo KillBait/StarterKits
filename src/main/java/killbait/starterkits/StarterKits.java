@@ -31,12 +31,6 @@ public class StarterKits {
 
     public static Item kitCreator;
 
-    /** keep track of GUIs that we make*/
-    private static int modGuiIndex = 0;
-
-    /** Set our custom inventory Gui index to the next available Gui index */
-    public static final int GUI_ITEM_INV = modGuiIndex++;
-
     /* Register the preInit Handler */
 
     @Mod.EventHandler
