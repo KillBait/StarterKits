@@ -1,6 +1,5 @@
 package killbait.starterkits.common.proxy;
 
-public class CommonProxy{
-
+public abstract class CommonProxy implements IProxy {
 
 }

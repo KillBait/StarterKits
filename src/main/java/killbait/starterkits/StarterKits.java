@@ -1,7 +1,6 @@
 package killbait.starterkits;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -10,7 +9,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import killbait.starterkits.common.EntityEventHandler;
 import killbait.starterkits.common.item.ItemKitCreator;
-import killbait.starterkits.common.proxy.CommonProxy;
+import killbait.starterkits.common.proxy.IProxy;
 import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
 import net.minecraft.item.Item;
@@ -20,17 +19,23 @@ import net.minecraft.item.Item;
 public class StarterKits {
 
     /* create a safe instance of the mod */
-    @Mod.Instance("StarterKits")
+    @Mod.Instance(Reference.MOD_ID)
     public static StarterKits instance;
 
     /* Resister our proxy classes */
 
-    @SidedProxy(clientSide = "killbait.starterkits.common.proxy.ClientProxy", serverSide = "killbait.starterkits.common.proxy.CommonProxy")
-    public static CommonProxy proxy;
+    @SidedProxy(clientSide = "killbait.starterkits.common.proxy.ClientProxy", serverSide = "killbait.starterkits.common.proxy.ServerProxy")
+    public static IProxy proxy;
 
     /* Define our items*/
 
     public static Item kitCreator;
+
+    /** keep track of GUIs that we make*/
+    private static int modGuiIndex = 0;
+
+    /** Set our custom inventory Gui index to the next available Gui index */
+    public static final int GUI_ITEM_INV = modGuiIndex++;
 
     /* Register the preInit Handler */
 
