@@ -1,5 +1,7 @@
 package killbait.starterkits.common.utils;
 
+import java.security.cert.TrustAnchor;
+
 public class Reference {
 
     // Mod related stuff
@@ -10,6 +12,7 @@ public class Reference {
 
     // Booleans
 
+    public static final boolean DEBUG = true;
 
     // Strings
 
