@@ -26,7 +26,7 @@ public class StarterKits {
     * Is this rearly needed ????? Remove if not
     */
 
-    @SidedProxy(clientSide = "killbait.starterkits.common.proxy.ProxyClient", serverSide = "killbait.starterkits.comon.proxy.ProxyServer")
+    @SidedProxy(clientSide = "killbait.starterkits.common.proxy.ProxyClient", serverSide = "killbait.starterkits.common.proxy.ProxyServer")
     public static Proxy proxy;
 
     /* */
