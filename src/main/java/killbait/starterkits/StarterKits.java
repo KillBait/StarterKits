@@ -6,8 +6,10 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import killbait.starterkits.common.EntityEventHandler;
+import killbait.starterkits.common.handlers.EntityEventHandler;
+import killbait.starterkits.common.handlers.GuiHandler;
 import killbait.starterkits.common.item.ItemKitCreator;
 import killbait.starterkits.common.proxy.IProxy;
 import killbait.starterkits.common.utils.LogHelper;
@@ -47,8 +49,21 @@ public class StarterKits {
     /* Register the init Handler */
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
+
+        // Register the GUI Handler
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+
+        /* Initialize mod tile entities
+        proxy.registerTileEntities();*/
+
+        // Initialize custom rendering and pre-load textures (Client only)
+        //proxy.initRenderingAndTextures();
+
+        // Register the Items Event Handler
+        //proxy.registerEventHandlers();
+
+        FMLCommonHandler.instance().bus().register(new EntityEventHandler());
 
     }
 
@@ -66,7 +81,8 @@ public class StarterKits {
         /*MinecraftForge.EVENT_BUS.register(new EntityEventHandler());*/
 
         /* Register our handler using FML */
-        FMLCommonHandler.instance().bus().register(new EntityEventHandler());
+        //FMLCommonHandler.instance().bus().register(new EntityEventHandler());
+        //NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
 
 

@@ -20,5 +20,5 @@ public class Reference {
 
     // GUI related stuff
 
-    public static final int GUI_INDEX_KITCREATOR = 1;
+    public static final int GUI_INDEX_KITCREATOR = 0;
 }
