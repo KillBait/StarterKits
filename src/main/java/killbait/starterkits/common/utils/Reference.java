@@ -1,7 +1,5 @@
 package killbait.starterkits.common.utils;
 
-import java.security.cert.TrustAnchor;
-
 public class Reference {
 
     // Mod related stuff

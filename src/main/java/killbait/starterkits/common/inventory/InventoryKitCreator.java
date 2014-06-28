@@ -1,43 +1,80 @@
 package killbait.starterkits.common.inventory;
 
-import killbait.starterkits.common.item.ItemKitCreator;
+import killbait.starterkits.common.utils.INBTTaggable;
 import killbait.starterkits.common.utils.LogHelper;
+import killbait.starterkits.common.utils.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
 
-public class InventoryKitCreator implements IInventory {
 
-    private String name = "Kit Creator";
+import java.util.UUID;
 
-    // Define our inventory size
-    public static final int INV_SIZE = 27;
+public class InventoryKitCreator implements IInventory, INBTTaggable {
 
-    // The inventory's size must be same as number of slots you add to the Container class
-    private ItemStack[] inventory = new ItemStack[INV_SIZE];
+    //private String name = "Kit Creator";
 
-    // Provide a NBT Tag Compound to reference
-    private final ItemStack invStack;
+    public ItemStack parentItemStack;
+    protected ItemStack[] inventory;
+    protected String customName;
 
-    // * @param itemstack - the ItemStack to which this inventory belongs
-    public InventoryKitCreator(ItemStack stack)
-    {
-        this.invStack = stack;
-        // Just in case the itemstack doesn't yet have an NBT Tag Compound:
-        if (!invStack.hasTagCompound())
-        {
-            invStack.setTagCompound(new NBTTagCompound());
+    public InventoryKitCreator(ItemStack itemStack) {
+        int size;
+        parentItemStack = itemStack;
+        size = ContainerKitCreator.KITCREATOR_INVENTORY_ROWS * ContainerKitCreator.KITCREATOR_INVRNTORY_COLUMNS;
+        inventory = new ItemStack[size];
+        readFromNBT(itemStack.getTagCompound());
+    }
+
+    public void onGuiSaved(EntityPlayer entityPlayer) {
+        parentItemStack = findParentItemStack(entityPlayer);
+
+        LogHelper.info(parentItemStack);
+
+        if (parentItemStack != null) {
+            save();
         }
-         // note that it's okay to use stack instead of invItem right there
-         // both reference the same memory location, so whatever you change using
-         // either reference will change in the other
+    }
 
-        // Read the inventory contents from NBT
-        readFromNBT(invStack.getTagCompound());
-        LogHelper.info("Inventory" + invStack.getTagCompound());
+    public ItemStack findParentItemStack(EntityPlayer entityPlayer) {
+        if (NBTHelper.hasUUID(parentItemStack)) {
+            UUID parentItemStackUUID = new UUID(parentItemStack.getTagCompound().getLong("UUIDMostSig"), parentItemStack.getTagCompound().getLong("UUIDLeastSig"));
+            for (int i = 0; i < entityPlayer.inventory.getSizeInventory(); i++) {
+                ItemStack itemStack = entityPlayer.inventory.getStackInSlot(i);
+
+                if (NBTHelper.hasUUID(itemStack)) {
+                    if (itemStack.getTagCompound().getLong("UUIDMostSig") == parentItemStackUUID.getMostSignificantBits() && itemStack.getTagCompound().getLong("UUIDLeastSig") == parentItemStackUUID.getLeastSignificantBits()) {
+                        return itemStack;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public boolean matchesUUID(UUID uuid)
+    {
+        return NBTHelper.hasUUID(parentItemStack) && parentItemStack.getTagCompound().getLong("UUIDLeastSig") == uuid.getLeastSignificantBits() && parentItemStack.getTagCompound().getLong("UUIDMostSig") == uuid.getMostSignificantBits();
+    }
+
+    public void save()
+    {
+        NBTTagCompound nbtTagCompound = parentItemStack.getTagCompound();
+
+        if (nbtTagCompound == null)
+        {
+            nbtTagCompound = new NBTTagCompound();
+
+            UUID uuid = UUID.randomUUID();
+            nbtTagCompound.setLong("UUIDMostSig", uuid.getMostSignificantBits());
+            nbtTagCompound.setLong("UUIDLeastSig", uuid.getLeastSignificantBits());
+        }
+
+        writeToNBT(nbtTagCompound);
+        parentItemStack.setTagCompound(nbtTagCompound);
     }
 
     @Override
@@ -47,63 +84,65 @@ public class InventoryKitCreator implements IInventory {
     }
 
     @Override
-    public ItemStack getStackInSlot(int slot)
+    public ItemStack getStackInSlot(int slotIndex)
     {
-        return inventory[slot];
+        return inventory[slotIndex];
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount)
+    public ItemStack decrStackSize(int slotIndex, int decrementAmount)
     {
-        ItemStack stack = getStackInSlot(slot);
-        if(stack != null)
+        ItemStack itemStack = getStackInSlot(slotIndex);
+        if (itemStack != null)
         {
-            if(stack.stackSize > amount)
+            if (itemStack.stackSize <= decrementAmount)
             {
-                stack = stack.splitStack(amount);
-                markDirty();
+                setInventorySlotContents(slotIndex, null);
             }
             else
             {
-                setInventorySlotContents(slot, null);
+                itemStack = itemStack.splitStack(decrementAmount);
+                if (itemStack.stackSize == 0)
+                {
+                    setInventorySlotContents(slotIndex, null);
+                }
             }
         }
-        return stack;
+
+        return itemStack;
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot)
+    public ItemStack getStackInSlotOnClosing(int slotIndex)
     {
-        ItemStack stack = getStackInSlot(slot);
-        if(stack != null)
+        if (inventory[slotIndex] != null)
         {
-            setInventorySlotContents(slot, null);
+            ItemStack itemStack = inventory[slotIndex];
+            inventory[slotIndex] = null;
+            return itemStack;
         }
-        return stack;
+        else
+        {
+            return null;
+        }
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack stack)
+    public void setInventorySlotContents(int slotIndex, ItemStack itemStack)
     {
-        inventory[slot] = stack;
-
-        if (stack != null && stack.stackSize > getInventoryStackLimit())
-        {
-            stack.stackSize = getInventoryStackLimit();
-        }
-        markDirty();
+        inventory[slotIndex] = itemStack;
     }
 
     @Override
     public String getInventoryName()
     {
-        return name;
+        return this.hasCustomName() ? this.getCustomName() : "container.starterkits:KitCreator";
     }
 
     @Override
     public boolean hasCustomInventoryName()
     {
-        return name.length() > 0;
+        return false;
     }
 
     @Override
@@ -112,94 +151,95 @@ public class InventoryKitCreator implements IInventory {
         return 64;
     }
 
-    // 1.7.2 change to markDirty
     @Override
     public void markDirty()
     {
-        for (int i = 0; i < getSizeInventory(); ++i)
+        // NOOP
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer entityPlayer)
+    {
+        return true;
+    }
+
+    @Override
+    public void openInventory()
+    {
+        // NOOP
+    }
+
+    @Override
+    public void closeInventory()
+    {
+        // NOOP
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack)
+    {
+        return true;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbtTagCompound)
+    {
+        if (nbtTagCompound != null && nbtTagCompound.hasKey("Items"))
         {
-            if (getStackInSlot(i) != null && getStackInSlot(i).stackSize == 0)
-                inventory[i] = null;
-        }
-        // be sure to write to NBT when the inventory changes!
-        writeToNBT(invStack.getTagCompound());
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
-    {
-    // this will close the inventory if the player tries to move
-    // the item that opened it, but you need to return this method
-    // from the Container's canInteractWith method
-    // an alternative would be to override the slotClick method and
-    // prevent the current item slot from being clicked
-        return player.getHeldItem() == invStack;
-    }
-
-    @Override
-    public void openInventory() {}
-
-    @Override
-    public void closeInventory() {}
-
-    /**
-     * This method doesn't seem to do what it claims to do, as
-     * items can still be left-clicked and placed in the inventory
-     * even when this returns false
-     */
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack)
-    {
-        // Don't want to be able to store the inventory item within itself
-        // Bad things will happen, like losing your inventory
-        // Actually, this needs a custom Slot to work
-        // TODO: Double check this works
-        return !(stack.getItem() instanceof ItemKitCreator);
-    }
-
-    /**
-     * A custom method to read our inventory from an ItemStack's NBT compound
-     */
-    public void readFromNBT(NBTTagCompound compound) {
-        // now you must include the NBTBase type ID when getting the list; NBTTagCompound's ID is 10
-        // TODO: Check if this is correct
-        NBTTagList items = compound.getTagList("ItemInventory", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0; i < items.tagCount(); ++i) {
-            // tagAt(int) has changed to getCompoundTagAt(int)
-            NBTTagCompound item = items.getCompoundTagAt(i);
-            byte slot = item.getByte("Slot");
-            if (slot >= 0 && slot < getSizeInventory()) {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(item);
-            }
-        }
-    }
-
-    /**
-     * A custom method to write our inventory to an ItemStack's NBT compound
-     */
-    public void writeToNBT(NBTTagCompound compound)
-    {
-        // Create a new NBT Tag List to store itemstacks as NBT Tags
-        NBTTagList items = new NBTTagList();
-
-        for (int i = 0; i < getSizeInventory(); ++i)
-        {
-            // Only write stacks that contain items
-            if (getStackInSlot(i) != null)
+            // Read in the ItemStacks in the inventory from NBT
+            if (nbtTagCompound.hasKey("Items"))
             {
-                // Make a new NBT Tag Compound to write the itemstack and slot index to
-                NBTTagCompound item = new NBTTagCompound();
-                item.setByte("Slot", (byte) i);
-                // Writes the itemstack in slot(i) to the Tag Compound we just made
-                getStackInSlot(i).writeToNBT(item);
+                NBTTagList tagList = nbtTagCompound.getTagList("Items", 10);
+                inventory = new ItemStack[this.getSizeInventory()];
+                for (int i = 0; i < tagList.tagCount(); ++i)
+                {
+                    NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
+                    byte slotIndex = tagCompound.getByte("Slot");
+                    if (slotIndex >= 0 && slotIndex < inventory.length)
+                    {
+                        inventory[slotIndex] = ItemStack.loadItemStackFromNBT(tagCompound);
+                    }
+                }
+            }
 
-                // add the tag compound to our tag list
-                items.appendTag(item);
+            // Read in any custom name for the inventory
+            if (nbtTagCompound.hasKey("display") && nbtTagCompound.getTag("display").getClass().equals(NBTTagCompound.class))
+            {
+                if (nbtTagCompound.getCompoundTag("display").hasKey("Name"))
+                {
+                    customName = nbtTagCompound.getCompoundTag("display").getString("Name");
+                }
             }
         }
-        // Add the TagList to the ItemStack's Tag Compound with the name "ItemInventory"
-        compound.setTag("ItemInventory", items);
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbtTagCompound)
+    {
+        // Write the ItemStacks in the inventory to NBT
+        LogHelper.info("write nbt");
+        NBTTagList tagList = new NBTTagList();
+        for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex)
+        {
+            if (inventory[currentIndex] != null)
+            {
+                NBTTagCompound tagCompound = new NBTTagCompound();
+                tagCompound.setByte("Slot", (byte) currentIndex);
+                inventory[currentIndex].writeToNBT(tagCompound);
+                tagList.appendTag(tagCompound);
+            }
+        }
+        nbtTagCompound.setTag("Items", tagList);
+    }
+
+    public boolean hasCustomName()
+    {
+        return customName != null && customName.length() > 0;
+    }
+
+    public String getCustomName()
+    {
+        return customName;
     }
 
 

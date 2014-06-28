@@ -1,56 +1,39 @@
 package killbait.starterkits.common.client.gui;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import killbait.starterkits.common.inventory.ContainerKitCreator;
 import killbait.starterkits.common.inventory.InventoryKitCreator;
-import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+@SideOnly(Side.CLIENT)
 public class GuiKitCreator extends GuiContainer {
 
-    /** x and y size of the inventory window in pixels. Defined as float, passed as int
-     * These are used for drawing the player model. */
-    private float xSize_lo;
-    private float ySize_lo;
-
-    /** ResourceLocation takes 2 parameters: ModId, path to texture at the location:
-     * "src/minecraft/assets/modid/" */
+    private final ItemStack parentItemStack;
+    private final InventoryKitCreator inventoryKitCreator;
     private static final ResourceLocation iconLocation = new ResourceLocation(Reference.MOD_ID.toLowerCase() + ":textures/gui/kitcreator.png");
 
-    /** The inventory to render on screen */
-    private final InventoryKitCreator inventory;
 
-    public GuiKitCreator(EntityPlayer player, InventoryPlayer inv1, InventoryKitCreator inv2)
+    public GuiKitCreator(EntityPlayer entityPlayer, InventoryKitCreator inventoryKitCreator)
     {
-        super(new ContainerKitCreator(player, inv1, inv2));
-        this.inventory = inv2;
-        LogHelper.info("creater" + " " + this.inventory + " "+ inv1 + " " + inv2);
-    }
+        super(new ContainerKitCreator(entityPlayer, inventoryKitCreator));
 
-    /*public GuiKitCreator(ContainerKitCreator containerItem)
-    {
-        super(containerItem);
-        this.inventory = containerItem.inventory;
-    }*/
+        this.parentItemStack = inventoryKitCreator.parentItemStack;
+        this.inventoryKitCreator = inventoryKitCreator;
 
-    /**
-     * Draws the screen and all the components in it.
-     */
-    public void drawScreen(int par1, int par2, float par3)
-    {
-        super.drawScreen(par1, par2, par3);
-        this.xSize_lo = (float)par1;
-        this.ySize_lo = (float)par2;
+        xSize = 194;
+        ySize = 213;
     }
 
     /**
@@ -59,37 +42,22 @@ public class GuiKitCreator extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        String s = inventory.hasCustomInventoryName() ? inventory.getInventoryName() : I18n.format(inventory.getInventoryName());
-        fontRendererObj.drawString(s, xSize / 2 - fontRendererObj.getStringWidth(s) / 2, 0, 4210752);
-        fontRendererObj.drawString(I18n.format("container.inventory"), 26, ySize - 96 + 4, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryKitCreator.getInventoryName()), 8, 6, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal("Some Text"), 35, ySize - 95 + 2, 4210752);
     }
 
 
-    /**
-     * Draw the background layer for the GuiContainer (everything behind the items)
-     */
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float opacity, int x, int y)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(iconLocation);
-        int k = (this.width - 194) / 2;
-        int l = (this.height - 213) / 2;
-        this.drawTexturedModalRect(k, l, 0, 0, 194,213);
-        int i1;
-        //drawPlayerModel(k + 51, l + 75, 30, (float)(k + 51) - this.xSize_lo, (float)(l + 75 - 50) - this.ySize_lo, this.mc.thePlayer);
-    }
 
-/*    // If using 1.7.2 (you can do this in 1.6.4 too, but it wasn't absolutely necessary)
-// you can override keyTyped to allow your custom keybinding to close the gui
-    @Override
-    protected void keyTyped(char c, int keyCode) {
-// make sure you call super!!!
-        super.keyTyped(c, keyCode);
-// 1 is the Esc key, and we made our keybinding array public and static so we can access it here
-        if (c == 1 || keyCode == KeyHandler.keys[KeyHandler.CUSTOM_INV].getKeyCode()) {
-            mc.thePlayer.closeScreen();
-        }
-    }*/
+        this.mc.getTextureManager().bindTexture(iconLocation);
+
+        int xStart = (width - xSize) / 2;
+        int yStart = (height - ySize) / 2;
+        this.drawTexturedModalRect(xStart, yStart, 0, 0, xSize, ySize);
+    }
 
     /**
      * This renders the player model in standard inventory position;

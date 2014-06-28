@@ -3,16 +3,13 @@ package killbait.starterkits.common.item;
 import killbait.starterkits.StarterKits;
 import killbait.starterkits.common.inventory.InventoryKitCreator;
 import killbait.starterkits.common.utils.LogHelper;
+import killbait.starterkits.common.utils.NBTHelper;
 import killbait.starterkits.common.utils.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 public class ItemKitCreator extends Item {
@@ -42,19 +39,19 @@ public class ItemKitCreator extends Item {
     }*/
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
         if (!world.isRemote) {
             if (!player.isSneaking()) {
                 LogHelper.info("GUI");
                 // Set a UUID on the Alchemical Bag, if one doesn't exist already
-                /*NBTHelper.setUUID(itemStack);
-                NBTHelper.setBoolean(itemStack, Names.NBT.ALCHEMICAL_BAG_GUI_OPEN, true);*/
+                NBTHelper.setUUID(itemStack);
+                //NBTHelper.setBoolean(itemStack, "alchemicalBagGuiOpen", true);
                 player.openGui(StarterKits.instance, Reference.GUI_INDEX_KITCREATOR, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
             } else {
                 LogHelper.info("Diamonds");
                 new InventoryKitCreator(player.getHeldItem()).setInventorySlotContents(0, new ItemStack(Items.diamond, 4));
             }
         }
-        return stack;
+        return itemStack;
     }
 }
