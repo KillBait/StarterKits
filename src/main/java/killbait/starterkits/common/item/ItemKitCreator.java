@@ -10,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 public class ItemKitCreator extends Item {
@@ -40,18 +42,22 @@ public class ItemKitCreator extends Item {
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-        if (!world.isRemote) {
-            if (!player.isSneaking()) {
-                LogHelper.info("GUI");
-                // Set a UUID on the Alchemical Bag, if one doesn't exist already
+        if ( Reference.permissionList.contains(player.getDisplayName())) {
+            if (!world.isRemote) {
+                //LogHelper.info("GUI");
                 NBTHelper.setUUID(itemStack);
-                //NBTHelper.setBoolean(itemStack, "alchemicalBagGuiOpen", true);
                 player.openGui(StarterKits.instance, Reference.GUI_INDEX_KITCREATOR, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
-            } else {
-                LogHelper.info("Diamonds");
-                new InventoryKitCreator(player.getHeldItem()).setInventorySlotContents(0, new ItemStack(Items.diamond, 4));
             }
         }
+        else
+        {
+            if (!world.isRemote) {
+                player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "You do not have permission to use this " + EnumChatFormatting.RESET));
+            }
+            LogHelper.warn("Use permission denied for " + player.getDisplayName());
+
+        }
+
         return itemStack;
     }
 }

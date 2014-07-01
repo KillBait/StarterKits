@@ -8,6 +8,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import killbait.starterkits.common.handlers.ConfigHandler;
 import killbait.starterkits.common.handlers.EntityEventHandler;
 import killbait.starterkits.common.handlers.GuiHandler;
 import killbait.starterkits.common.item.ItemKitCreator;
@@ -15,6 +16,8 @@ import killbait.starterkits.common.proxy.IProxy;
 import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
 import net.minecraft.item.Item;
+
+import java.util.ArrayList;
 
 @Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.MOD_VERSION)
 
@@ -32,6 +35,7 @@ public class StarterKits {
     /* Define our items*/
 
     public static Item kitCreator;
+    //public static ArrayList ArrayList<String> permissionList = new ArrayList<String>();
 
     /* Register the preInit Handler */
 
@@ -41,6 +45,8 @@ public class StarterKits {
         // Register our items
         kitCreator = new ItemKitCreator();
         GameRegistry.registerItem(kitCreator,"kitCreator");
+
+        ConfigHandler.init(event.getSuggestedConfigurationFile());
 
         LogHelper.info("preInit Finished");
 

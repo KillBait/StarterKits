@@ -5,6 +5,12 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.UUID;
 
+/* This class was borrowed from Equivalent Exchange GitHub page
+*
+* All credits for this class goto Pahimar
+*/
+
+
 public class NBTHelper
 {
     /**
@@ -59,7 +65,7 @@ public class NBTHelper
     {
         initNBTTagCompound(itemStack);
 
-        // Set a UUID on the Alchemical Bag, if one doesn't exist already
+        // Set a UUID, if one doesn't exist already
         if (!hasTag(itemStack, "UUIDMostSig") && !hasTag(itemStack, "UUIDLeastSig"))
         {
             UUID itemUUID = UUID.randomUUID();

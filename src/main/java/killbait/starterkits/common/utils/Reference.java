@@ -1,5 +1,9 @@
 package killbait.starterkits.common.utils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Reference {
 
     // Mod related stuff
@@ -14,9 +18,17 @@ public class Reference {
 
     // Strings
 
+    public static List<String> permissionList = new ArrayList<String>();
+
 
 
     // GUI related stuff
 
     public static final int GUI_INDEX_KITCREATOR = 0;
+
+    // Names of people allowed to use the KitCreator
+
+    public static Array String[];
+
+    // alchem
 }

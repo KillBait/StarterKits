@@ -4,7 +4,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import killbait.starterkits.common.inventory.ContainerKitCreator;
 import killbait.starterkits.common.inventory.InventoryKitCreator;
+import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -22,8 +24,8 @@ public class GuiKitCreator extends GuiContainer {
 
     private final ItemStack parentItemStack;
     private final InventoryKitCreator inventoryKitCreator;
-    private static final ResourceLocation iconLocation = new ResourceLocation(Reference.MOD_ID.toLowerCase() + ":textures/gui/kitcreator.png");
-
+    protected static final ResourceLocation bgLocation = new ResourceLocation(Reference.MOD_ID.toLowerCase() + ":textures/gui/kitcreator.png");
+    protected static final ResourceLocation buttonTextures = new ResourceLocation("textures/gui/widgets.png");
 
     public GuiKitCreator(EntityPlayer entityPlayer, InventoryKitCreator inventoryKitCreator)
     {
@@ -36,14 +38,28 @@ public class GuiKitCreator extends GuiContainer {
         ySize = 213;
     }
 
+    @Override
+    public void initGui()
+    {
+        super.initGui();
+
+        //make buttons
+        //id, x, y, width, height, text
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
+        this.buttonList.add(new GuiButtonImage(1, i + 110, j + 24,14, 14,"",208,0,14,14,bgLocation));
+        this.buttonList.add(new GuiButtonImage(2, i + 90, j + 24,14, 14, "C",100,100,14,14,bgLocation));
+        this.buttonList.add(new GuiButtonImage(3, i + 70, j + 24,14, 14, "",194,0,14,14,bgLocation));
+        this.buttonList.add(new GuiButton(4, i + 145, j + 21,30,20,"Set"));
+    }
     /**
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        fontRendererObj.drawString(StatCollector.translateToLocal(inventoryKitCreator.getInventoryName()), 8, 6, 4210752);
-        fontRendererObj.drawString(StatCollector.translateToLocal("Some Text"), 35, ySize - 95 + 2, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal("Select Kit Number"), 57, 10, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal("Place Items, then click Set"), 15, ySize - 110 + 2, 4210752);
     }
 
 
@@ -52,51 +68,39 @@ public class GuiKitCreator extends GuiContainer {
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        this.mc.getTextureManager().bindTexture(iconLocation);
+        this.mc.getTextureManager().bindTexture(bgLocation);
 
         int xStart = (width - xSize) / 2;
         int yStart = (height - ySize) / 2;
         this.drawTexturedModalRect(xStart, yStart, 0, 0, xSize, ySize);
     }
 
-    /**
-     * This renders the player model in standard inventory position;
-     * copied straight from vanilla code but with renamed method parameters
-     */
-    public static void drawPlayerModel(int x, int y, int scale, float yaw, float pitch, EntityLivingBase entity) {
-        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-        GL11.glPushMatrix();
-        GL11.glTranslatef(x, y, 50.0F);
-        GL11.glScalef(-scale, scale, scale);
-        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-        float f2 = entity.renderYawOffset;
-        float f3 = entity.rotationYaw;
-        float f4 = entity.rotationPitch;
-        float f5 = entity.prevRotationYawHead;
-        float f6 = entity.rotationYawHead;
-        GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting();
-        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-((float) Math.atan(pitch / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
-        entity.renderYawOffset = (float) Math.atan(yaw / 40.0F) * 20.0F;
-        entity.rotationYaw = (float) Math.atan(yaw / 40.0F) * 40.0F;
-        entity.rotationPitch = -((float) Math.atan(pitch / 40.0F)) * 20.0F;
-        entity.rotationYawHead = entity.rotationYaw;
-        entity.prevRotationYawHead = entity.rotationYaw;
-        GL11.glTranslatef(0.0F, entity.yOffset, 0.0F);
-        RenderManager.instance.playerViewY = 180.0F;
-        RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
-        entity.renderYawOffset = f2;
-        entity.rotationYaw = f3;
-        entity.rotationPitch = f4;
-        entity.prevRotationYawHead = f5;
-        entity.rotationYawHead = f6;
-        GL11.glPopMatrix();
-        RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-    }
+    @Override
+    protected void actionPerformed(GuiButton button) {
+        super.actionPerformed(button);
 
+        //LogHelper.info(button.id);
+
+        switch (button.id) {
+            case 0:
+                LogHelper.info("Button 0 Selected");
+                break;
+            case 1:
+                LogHelper.info("Button 1 Selected");
+                break;
+            case 2:
+                LogHelper.info("Button 2 Selected");
+                break;
+            case 3:
+                LogHelper.info("Button 3 Selected");
+                break;
+            case 4:
+                LogHelper.info("Button 4 Selected");
+                break;
+            default:
+                LogHelper.info("default");
+
+        }
+
+    }
 }

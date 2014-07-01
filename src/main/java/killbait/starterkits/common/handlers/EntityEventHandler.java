@@ -24,7 +24,7 @@ public class EntityEventHandler {
         {
             LogHelper.info("New Player joined.. Giving Starter Kit to " + event.player.getDisplayName());
             //event.player.getEntityData().setBoolean("GivenKit", true);
-            event.player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "Welcome " + EnumChatFormatting.RED + event.player.getDisplayName() + EnumChatFormatting.YELLOW + "......." + EnumChatFormatting.RESET));
+            event.player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "Welcome " + EnumChatFormatting.RED + event.player.getDisplayName() + "." + EnumChatFormatting.RESET));
             event.player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "have this chest of goodies to get you started :)" + EnumChatFormatting.RESET));
 
         }

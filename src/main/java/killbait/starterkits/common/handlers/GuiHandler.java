@@ -14,9 +14,7 @@ public class GuiHandler implements IGuiHandler {
     @Override
     public Object getServerGuiElement(int guiId, EntityPlayer player, World world, int x, int y, int z) {
         if (guiId == Reference.GUI_INDEX_KITCREATOR)  {
-            LogHelper.info("111111111111");
             return new ContainerKitCreator(player,  new InventoryKitCreator(player.getHeldItem()));
-            //return new ContainerAlchemicalBag(player, new InventoryAlchemicalBag(player.getHeldItem()));
         } else {
             return null;
         }
@@ -25,9 +23,7 @@ public class GuiHandler implements IGuiHandler {
     @Override
     public Object getClientGuiElement(int guiId, EntityPlayer player, World world, int x, int y, int z) {
         if (guiId == Reference.GUI_INDEX_KITCREATOR)  {
-            LogHelper.info("22222222222222222");
             return new GuiKitCreator(player, new InventoryKitCreator(player.getHeldItem()));
-            //return new GuiKitCreator(player, new InventoryKitCreator(player.getHeldItem()));
         } else {
             return null;
         }

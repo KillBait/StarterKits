@@ -31,12 +31,12 @@ public class ContainerKitCreator extends Container {
         kitCreatorInventoryRows = KITCREATOR_INVENTORY_ROWS;
         kitCreatorInventoryColumns = KITCREATOR_INVRNTORY_COLUMNS;
 
-        // Add the Alchemical Chest slots to the container
+        // Add the KitCreator slots to the container
         for (int bagRowIndex = 0; bagRowIndex < kitCreatorInventoryRows; ++bagRowIndex)
         {
             for (int bagColumnIndex = 0; bagColumnIndex < kitCreatorInventoryColumns; ++bagColumnIndex)
             {
-                this.addSlotToContainer(new SlotKitCreator(this, inventoryKitCreator, entityPlayer, bagColumnIndex + bagRowIndex * kitCreatorInventoryColumns, 17 + bagColumnIndex * 18, 62 + bagRowIndex * 18));
+                this.addSlotToContainer(new SlotKitCreator(this, inventoryKitCreator, entityPlayer, bagColumnIndex + bagRowIndex * kitCreatorInventoryColumns, 17 + bagColumnIndex * 18, 49 + bagRowIndex * 18));
             }
         }
 
@@ -45,14 +45,14 @@ public class ContainerKitCreator extends Container {
         {
             for (int inventoryColumnIndex = 0; inventoryColumnIndex < PLAYER_INVENTORY_COLUMNS; ++inventoryColumnIndex)
             {
-                this.addSlotToContainer(new Slot(entityPlayer.inventory, inventoryColumnIndex + inventoryRowIndex * 9 + 9, 17 + inventoryColumnIndex * 18, 130 + inventoryRowIndex * 18));
+                this.addSlotToContainer(new Slot(entityPlayer.inventory, inventoryColumnIndex + inventoryRowIndex * 9 + 9, 17 + inventoryColumnIndex * 18, 126 + inventoryRowIndex * 18));
             }
         }
 
         // Add the player's action bar slots to the container
         for (int actionBarSlotIndex = 0; actionBarSlotIndex < PLAYER_INVENTORY_COLUMNS; ++actionBarSlotIndex)
         {
-            this.addSlotToContainer(new Slot(entityPlayer.inventory, actionBarSlotIndex, 17 + actionBarSlotIndex * 18, 188));
+            this.addSlotToContainer(new Slot(entityPlayer.inventory, actionBarSlotIndex, 17 + actionBarSlotIndex * 18, 184));
         }
     }
 
@@ -69,7 +69,6 @@ public class ContainerKitCreator extends Container {
 
         if (!entityPlayer.worldObj.isRemote)
         {
-            // We can probably do this better now considering the InventoryAlchemicalBag has a findParent method
             InventoryPlayer invPlayer = entityPlayer.inventory;
             for (ItemStack itemStack : invPlayer.mainInventory)
             {
@@ -81,8 +80,6 @@ public class ContainerKitCreator extends Container {
                     }
                 }
             }
-
-            LogHelper.info("save");
 
             saveInventory(entityPlayer);
         }
@@ -147,6 +144,18 @@ public class ContainerKitCreator extends Container {
     public void saveInventory(EntityPlayer entityPlayer)
     {
         inventoryKitCreator.onGuiSaved(entityPlayer);
+    }
+
+    // TODO: Fix me!!! .. can still move the held KitCreator if you use the inventory shortcut keys
+
+    @Override
+    public ItemStack slotClick(int slot, int button, int flag, EntityPlayer player) {
+        // this will prevent the player from interacting with the item that opened the inventory:
+        //LogHelper.info(slot + " " + getSlot(slot) + " " + getSlot(slot).getStack() + " " + player.getHeldItem());
+        if (slot >= 0 && getSlot(slot) != null && getSlot(slot).getStack() == player.getHeldItem()) {
+            return null;
+        }
+        return super.slotClick(slot, button, flag, player);
     }
 
 }

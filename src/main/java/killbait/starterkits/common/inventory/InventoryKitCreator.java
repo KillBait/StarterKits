@@ -31,7 +31,7 @@ public class InventoryKitCreator implements IInventory, INBTTaggable {
     public void onGuiSaved(EntityPlayer entityPlayer) {
         parentItemStack = findParentItemStack(entityPlayer);
 
-        LogHelper.info(parentItemStack);
+        //LogHelper.info(parentItemStack);
 
         if (parentItemStack != null) {
             save();
@@ -217,7 +217,7 @@ public class InventoryKitCreator implements IInventory, INBTTaggable {
     public void writeToNBT(NBTTagCompound nbtTagCompound)
     {
         // Write the ItemStacks in the inventory to NBT
-        LogHelper.info("write nbt");
+        //LogHelper.info("write nbt");
         NBTTagList tagList = new NBTTagList();
         for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex)
         {

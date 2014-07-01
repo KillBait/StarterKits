@@ -3,6 +3,11 @@ package killbait.starterkits.common.utils;
 import cpw.mods.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
+/* This class was borrowed from Equivalent Exchange GitHub page
+*
+* All credits for this class goto Pahimar
+*/
+
 public class LogHelper {
 
     public static void log(Level logLevel, Object object)
