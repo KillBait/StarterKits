@@ -7,11 +7,14 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 import killbait.starterkits.common.handlers.ConfigHandler;
 import killbait.starterkits.common.handlers.EntityEventHandler;
 import killbait.starterkits.common.handlers.GuiHandler;
 import killbait.starterkits.common.item.ItemKitCreator;
+import killbait.starterkits.common.network.GuiButtonPacket;
 import killbait.starterkits.common.proxy.IProxy;
 import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
@@ -37,17 +40,22 @@ public class StarterKits {
     public static Item kitCreator;
     //public static ArrayList ArrayList<String> permissionList = new ArrayList<String>();
 
+    public static SimpleNetworkWrapper networkWrapper;
+
     /* Register the preInit Handler */
 
     @Mod.EventHandler
     public void  preInit(FMLPreInitializationEvent event)
     {
         // Register our items
+        LogHelper.info("Registering Items");
         kitCreator = new ItemKitCreator();
         GameRegistry.registerItem(kitCreator,"kitCreator");
-
+        LogHelper.info("Loading Config");
         ConfigHandler.init(event.getSuggestedConfigurationFile());
-
+        LogHelper.info("Registering packet handler");
+        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID.toLowerCase());
+        networkWrapper.registerMessage(GuiButtonPacket.class, GuiButtonPacket.class, Reference.GUIBUTTON_PACKET_ID, Side.SERVER);
         LogHelper.info("preInit Finished");
 
     }

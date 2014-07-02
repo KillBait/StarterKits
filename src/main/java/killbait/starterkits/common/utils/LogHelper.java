@@ -1,5 +1,6 @@
 package killbait.starterkits.common.utils;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
@@ -13,7 +14,7 @@ public class LogHelper {
     public static void log(Level logLevel, Object object)
     {
         //FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));
-        FMLLog.log(Reference.MOD_NAME, logLevel, "[StarterKits]: ".concat(String.valueOf(object)));
+        FMLLog.log(Reference.MOD_NAME, logLevel, "[StarterKits] " + "[ " + FMLCommonHandler.instance().getEffectiveSide() + " ] :".concat(String.valueOf(object)));
 
     }
 

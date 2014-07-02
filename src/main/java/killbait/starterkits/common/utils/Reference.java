@@ -30,5 +30,7 @@ public class Reference {
 
     public static Array String[];
 
-    // alchem
+    // network packet ID
+
+    public static final int GUIBUTTON_PACKET_ID = 0;
 }

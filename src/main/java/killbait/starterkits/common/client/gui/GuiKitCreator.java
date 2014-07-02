@@ -2,8 +2,10 @@ package killbait.starterkits.common.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import killbait.starterkits.StarterKits;
 import killbait.starterkits.common.inventory.ContainerKitCreator;
 import killbait.starterkits.common.inventory.InventoryKitCreator;
+import killbait.starterkits.common.network.GuiButtonPacket;
 import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
 import net.minecraft.client.gui.GuiButton;
@@ -86,7 +88,10 @@ public class GuiKitCreator extends GuiContainer {
                 LogHelper.info("Button 0 Selected");
                 break;
             case 1:
-                LogHelper.info("Button 1 Selected");
+                LogHelper.info("Send to server: Button 1 Selected");
+                //StarterKits.networkWrapper.sendToServer(new GuiButtonPacket("Foobar"));
+                StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(button.id));
+                StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(this.inventoryKitCreator));
                 break;
             case 2:
                 LogHelper.info("Button 2 Selected");
