@@ -1,6 +1,7 @@
 package killbait.starterkits.common.utils;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.UUID;
@@ -232,5 +233,6 @@ public class NBTHelper
         initNBTTagCompound(itemStack);
 
         itemStack.stackTagCompound.setDouble(keyName, keyValue);
+
     }
 }

@@ -46,6 +46,7 @@ public class InventoryKitCreator implements IInventory, INBTTaggable {
     public ItemStack findParentItemStack(EntityPlayer entityPlayer) {
         if (NBTHelper.hasUUID(parentItemStack)) {
             UUID parentItemStackUUID = new UUID(parentItemStack.getTagCompound().getLong("UUIDMostSig"), parentItemStack.getTagCompound().getLong("UUIDLeastSig"));
+            LogHelper.info("size is" + entityPlayer.inventory.getSizeInventory());
             for (int i = 0; i < entityPlayer.inventory.getSizeInventory(); i++) {
                 ItemStack itemStack = entityPlayer.inventory.getStackInSlot(i);
 
