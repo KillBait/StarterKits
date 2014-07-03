@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import killbait.starterkits.common.inventory.InventoryKitCreator;
 import killbait.starterkits.common.item.ItemKitCreator;
 import killbait.starterkits.common.utils.LogHelper;
+import killbait.starterkits.common.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 
@@ -36,7 +37,7 @@ public class GuiButtonPacket implements IMessage, IMessageHandler<GuiButtonPacke
     public void fromBytes(ByteBuf buf) {
 
         number = buf.readByte();
-
+        Reference.serverContainer.saveInventory(Minecraft.getMinecraft().thePlayer);
         LogHelper.info("fromBytes = " + number);
 
     }

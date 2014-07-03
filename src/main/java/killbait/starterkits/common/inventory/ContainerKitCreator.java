@@ -83,6 +83,7 @@ public class ContainerKitCreator extends Container {
             }
 
             saveInventory(entityPlayer);
+            LogHelper.all("ContainerClosed");
         }
     }
 
@@ -144,7 +145,10 @@ public class ContainerKitCreator extends Container {
 
     public void saveInventory(EntityPlayer entityPlayer)
     {
+
+        LogHelper.info("SaveInventory");
         inventoryKitCreator.onGuiSaved(entityPlayer);
+
     }
 
     // TODO: Fix me!!! .. can still move the held KitCreator if you use the inventory shortcut keys

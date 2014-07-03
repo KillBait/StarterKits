@@ -40,6 +40,7 @@ public class InventoryKitCreator implements IInventory, INBTTaggable {
         if (parentItemStack != null) {
             save();
         }
+        LogHelper.info("onGuiSaved");
     }
 
     public ItemStack findParentItemStack(EntityPlayer entityPlayer) {
@@ -76,6 +77,7 @@ public class InventoryKitCreator implements IInventory, INBTTaggable {
 
         writeToNBT(nbtTagCompound);
         parentItemStack.setTagCompound(nbtTagCompound);
+        LogHelper.info("save");
     }
 
     @Override
@@ -102,6 +104,7 @@ public class InventoryKitCreator implements IInventory, INBTTaggable {
             }
         }
 
+        LogHelper.info("decrStackSize");
         return itemStack;
     }
 

@@ -18,6 +18,7 @@ public class GuiHandler implements IGuiHandler {
 
 
             ContainerKitCreator cont = new ContainerKitCreator(player,  new InventoryKitCreator(player.getHeldItem()));
+            Reference.serverContainer= cont;
 
             LogHelper.info(cont);
             return cont;

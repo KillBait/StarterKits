@@ -1,5 +1,8 @@
 package killbait.starterkits.common.utils;
 
+import killbait.starterkits.common.inventory.ContainerKitCreator;
+import net.minecraft.entity.player.InventoryPlayer;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,9 @@ public class Reference {
     // GUI related stuff
 
     public static final int GUI_INDEX_KITCREATOR = 0;
+    public static ContainerKitCreator serverContainer;
+    public static ContainerKitCreator clientContainer;
+    public static InventoryPlayer playerInventory;
 
     // Names of people allowed to use the KitCreator
 

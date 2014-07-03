@@ -96,6 +96,9 @@ public class GuiKitCreator extends GuiContainer {
                 StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(button.id));
                 StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(this.inventoryKitCreator));
                 this.inventoryKitCreator.decrStackSize(1, 1);
+                //Reference.clientContainer.saveInventory(Minecraft.getMinecraft().thePlayer);
+                //Reference.clientContainer.detectAndSendChanges();
+                //Reference.serverContainer.saveInventory(Minecraft.getMinecraft().thePlayer);
 
                 break;
             case 2:
