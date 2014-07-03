@@ -6,6 +6,7 @@ import killbait.starterkits.common.utils.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -156,6 +157,15 @@ public class ContainerKitCreator extends Container {
             return null;
         }
         return super.slotClick(slot, button, flag, player);
+    }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        //LogHelper.info("changes");
+
+
+
     }
 
 }

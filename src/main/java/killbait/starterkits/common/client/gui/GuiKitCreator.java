@@ -5,9 +5,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import killbait.starterkits.StarterKits;
 import killbait.starterkits.common.inventory.ContainerKitCreator;
 import killbait.starterkits.common.inventory.InventoryKitCreator;
+import killbait.starterkits.common.item.ItemKitCreator;
 import killbait.starterkits.common.network.GuiButtonPacket;
 import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -15,6 +17,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -92,6 +95,8 @@ public class GuiKitCreator extends GuiContainer {
                 //StarterKits.networkWrapper.sendToServer(new GuiButtonPacket("Foobar"));
                 StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(button.id));
                 StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(this.inventoryKitCreator));
+                this.inventoryKitCreator.decrStackSize(1, 1);
+
                 break;
             case 2:
                 LogHelper.info("Button 2 Selected");

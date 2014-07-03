@@ -36,6 +36,7 @@ public class GuiButtonPacket implements IMessage, IMessageHandler<GuiButtonPacke
     public void fromBytes(ByteBuf buf) {
 
         number = buf.readByte();
+
         LogHelper.info("fromBytes = " + number);
 
     }
@@ -45,6 +46,7 @@ public class GuiButtonPacket implements IMessage, IMessageHandler<GuiButtonPacke
 
         buf.writeByte(number);
         LogHelper.info("toBytes = " + buf + number);
+        //InventoryKitCreator.decrStackSize(int slotIndex, int decrementAmount);
 
     }
 
