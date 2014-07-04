@@ -6,7 +6,7 @@ import killbait.starterkits.StarterKits;
 import killbait.starterkits.common.inventory.ContainerKitCreator;
 import killbait.starterkits.common.inventory.InventoryKitCreator;
 import killbait.starterkits.common.item.ItemKitCreator;
-import killbait.starterkits.common.network.GuiButtonPacket;
+import killbait.starterkits.common.network.PacketHandler;
 import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
 import net.minecraft.client.Minecraft;
@@ -93,7 +93,7 @@ public class GuiKitCreator extends GuiContainer {
             case 1:
                 LogHelper.info("Send to server: Button 1 Selected");
                 //StarterKits.networkWrapper.sendToServer(new GuiButtonPacket("Foobar"));
-                StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(button.id));
+                StarterKits.networkWrapper.sendToServer(new PacketHandler(button.id));
                 //StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(this.inventoryKitCreator));
                 //this.inventoryKitCreator.decrStackSize(1, 1);
                 LogHelper.info(this.inventoryKitCreator.getSizeInventory());

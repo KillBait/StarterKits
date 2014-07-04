@@ -14,7 +14,7 @@ import killbait.starterkits.common.handlers.ConfigHandler;
 import killbait.starterkits.common.handlers.EntityEventHandler;
 import killbait.starterkits.common.handlers.GuiHandler;
 import killbait.starterkits.common.item.ItemKitCreator;
-import killbait.starterkits.common.network.GuiButtonPacket;
+import killbait.starterkits.common.network.PacketHandler;
 import killbait.starterkits.common.proxy.IProxy;
 import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
@@ -55,7 +55,7 @@ public class StarterKits {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         LogHelper.info("Registering packet handler");
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID.toLowerCase());
-        networkWrapper.registerMessage(GuiButtonPacket.class, GuiButtonPacket.class, Reference.GUIBUTTON_PACKET_ID, Side.SERVER);
+        networkWrapper.registerMessage(PacketHandler.class, PacketHandler.class, Reference.GUIBUTTON_PACKET_ID, Side.SERVER);
         LogHelper.info("preInit Finished");
 
     }

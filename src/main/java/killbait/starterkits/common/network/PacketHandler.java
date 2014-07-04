@@ -15,20 +15,20 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class GuiButtonPacket implements IMessage, IMessageHandler<GuiButtonPacket, IMessage> {
+public class PacketHandler implements IMessage, IMessageHandler<PacketHandler, IMessage> {
 
     private int number;
     private InventoryKitCreator kit;
 
-    public GuiButtonPacket() { }
+    public PacketHandler() { }
 
-    public GuiButtonPacket(int number) {
+    public PacketHandler(int number) {
         this.number = number;
         LogHelper.info("Packet is: " + this.number);
 
     }
 
-    public GuiButtonPacket(InventoryKitCreator ikc) {
+    public PacketHandler(InventoryKitCreator ikc) {
         this.kit = ikc;
         LogHelper.info("Packet is: " + this.kit);
 
@@ -74,9 +74,8 @@ public class GuiButtonPacket implements IMessage, IMessageHandler<GuiButtonPacke
     }
 
     @Override
-    public IMessage onMessage(GuiButtonPacket message, MessageContext ctx) {
+    public IMessage onMessage(PacketHandler message, MessageContext ctx) {
         System.out.println(String.format("[ %s ] : Received %s from %s", FMLCommonHandler.instance().getEffectiveSide(), message.number, ctx.getServerHandler().playerEntity.getDisplayName()));
         return null; // no response in this case
     }
 }
-
