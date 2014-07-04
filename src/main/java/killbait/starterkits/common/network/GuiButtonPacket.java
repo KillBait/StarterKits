@@ -51,7 +51,7 @@ public class GuiButtonPacket implements IMessage, IMessageHandler<GuiButtonPacke
     public void fromBytes(ByteBuf buf) {
 
         number = buf.readByte();
-
+        Reference.serverContainer.saveInventory(Minecraft.getMinecraft().thePlayer);
         LogHelper.info("fromBytes = " + number);
 
         //Reference.serverContainer.getInventory();
