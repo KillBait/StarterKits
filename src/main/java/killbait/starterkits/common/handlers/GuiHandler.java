@@ -14,13 +14,14 @@ public class GuiHandler implements IGuiHandler {
     @Override
     public Object getServerGuiElement(int guiId, EntityPlayer player, World world, int x, int y, int z) {
         if (guiId == Reference.GUI_INDEX_KITCREATOR)  {
-            LogHelper.info("ServerGuiElement");
 
 
-            ContainerKitCreator cont = new ContainerKitCreator(player,  new InventoryKitCreator(player.getHeldItem()));
 
-            LogHelper.info(cont);
-            return cont;
+            ContainerKitCreator container = new ContainerKitCreator(player,  new InventoryKitCreator(player.getHeldItem()));
+            Reference.serverContainer = container;
+            LogHelper.info("ServerGuiElement = " + container);
+
+            return container;
 
         } else {
             return null;
@@ -30,11 +31,9 @@ public class GuiHandler implements IGuiHandler {
     @Override
     public Object getClientGuiElement(int guiId, EntityPlayer player, World world, int x, int y, int z) {
         if (guiId == Reference.GUI_INDEX_KITCREATOR)  {
-            LogHelper.info("ClentGuiElement");
 
             GuiKitCreator gui = new GuiKitCreator(player, new InventoryKitCreator(player.getHeldItem()));
-
-            LogHelper.info(gui);
+            LogHelper.info("ClentGuiElement= " + gui);
 
             return gui;
 

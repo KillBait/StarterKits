@@ -1,5 +1,7 @@
 package killbait.starterkits.common.utils;
 
+import killbait.starterkits.common.inventory.ContainerKitCreator;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,8 @@ public class Reference {
     // GUI related stuff
 
     public static final int GUI_INDEX_KITCREATOR = 0;
+    public static ContainerKitCreator serverContainer;
+
 
     // Names of people allowed to use the KitCreator
 

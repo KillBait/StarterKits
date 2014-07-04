@@ -1,14 +1,20 @@
 package killbait.starterkits.common.inventory;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import killbait.starterkits.common.item.ItemKitCreator;
 import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.NBTHelper;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 
 public class ContainerKitCreator extends Container {
 
@@ -138,7 +144,18 @@ public class ContainerKitCreator extends Container {
                 slot.onSlotChanged();
             }
         }
-
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
+        if (side == Side.SERVER) {
+            // We are on the server side.
+            EntityPlayerMP player = (EntityPlayerMP) entityPlayer;
+            LogHelper.info("Player Side");
+        } else if (side == Side.CLIENT) {
+            EntityClientPlayerMP player = (EntityClientPlayerMP) entityPlayer;
+            LogHelper.info("Client Side");
+            // We are on the client side.
+        } else {
+            // We have an errornous state!
+        }
         return newItemStack;
     }
 
@@ -163,9 +180,39 @@ public class ContainerKitCreator extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         //LogHelper.info("changes");
+    }
 
+    public void dec()
+    {
+        this.inventoryKitCreator.decrStackSize(1, 1);
+    }
 
+    public void listItems()
+    {
+        if (this.inventoryKitCreator == null)
+        {
+            return;
+        }
+        else
+        {
+            int i = 0;
+            float f = 0.0F;
 
+            for (int j = 0; j < this.inventoryKitCreator.getSizeInventory(); ++j)
+            {
+                ItemStack itemstack = this.inventoryKitCreator.getStackInSlot(j);
+
+                if (itemstack != null)
+                {
+                    LogHelper.info(" Container stack = " + itemstack + ", size =" + itemstack.stackSize);
+                    //f += (float)itemstack.stackSize / (float)Math.min(par0IInventory.getInventoryStackLimit(), itemstack.getMaxStackSize());
+                    ++i;
+                }
+            }
+
+            //f /= (float)par0IInventory.getSizeInventory();
+            return;
+        }
     }
 
 }

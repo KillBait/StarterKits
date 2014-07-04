@@ -9,8 +9,11 @@ import io.netty.buffer.ByteBuf;
 import killbait.starterkits.common.inventory.InventoryKitCreator;
 import killbait.starterkits.common.item.ItemKitCreator;
 import killbait.starterkits.common.utils.LogHelper;
+import killbait.starterkits.common.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 public class GuiButtonPacket implements IMessage, IMessageHandler<GuiButtonPacket, IMessage> {
 
@@ -29,8 +32,20 @@ public class GuiButtonPacket implements IMessage, IMessageHandler<GuiButtonPacke
         this.kit = ikc;
         LogHelper.info("Packet is: " + this.kit);
 
+
     }
 
+    /* --------------------------------------------
+    *
+    *
+    * NOTE: toBytes is executed first, then fromBytes()
+    *
+    *
+    * -------------------------------------------- */
+
+
+
+    // fromBytes() is always executed server side only
 
     @Override
     public void fromBytes(ByteBuf buf) {
@@ -39,13 +54,21 @@ public class GuiButtonPacket implements IMessage, IMessageHandler<GuiButtonPacke
 
         LogHelper.info("fromBytes = " + number);
 
+        //Reference.serverContainer.getInventory();
+        if (number == 1) {
+            Reference.serverContainer.dec();
+            Reference.serverContainer.listItems();
+        }
+
     }
+
+    // toBytes is always triggered on the client side only
 
     @Override
     public void toBytes(ByteBuf buf) {
 
         buf.writeByte(number);
-        LogHelper.info("toBytes = " + buf + number);
+        LogHelper.info("toBytes = " + buf + ", contents = " + number);
         //InventoryKitCreator.decrStackSize(int slotIndex, int decrementAmount);
 
     }

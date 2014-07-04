@@ -94,8 +94,29 @@ public class GuiKitCreator extends GuiContainer {
                 LogHelper.info("Send to server: Button 1 Selected");
                 //StarterKits.networkWrapper.sendToServer(new GuiButtonPacket("Foobar"));
                 StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(button.id));
-                StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(this.inventoryKitCreator));
-                this.inventoryKitCreator.decrStackSize(1, 1);
+                //StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(this.inventoryKitCreator));
+                //this.inventoryKitCreator.decrStackSize(1, 1);
+                LogHelper.info(this.inventoryKitCreator.getSizeInventory());
+                if (this.inventoryKitCreator != null)
+                {
+                    int i = 0;
+                    float f = 0.0F;
+
+                    for (int j = 0; j < this.inventoryKitCreator.getSizeInventory(); ++j)
+                    {
+                        ItemStack itemstack = this.inventoryKitCreator.getStackInSlot(j);
+
+                        if (itemstack != null)
+                        {
+                            LogHelper.info(" GUI stack before = " + itemstack + ", size =" + itemstack.stackSize);
+                            //f += (float)itemstack.stackSize / (float)Math.min(par0IInventory.getInventoryStackLimit(), itemstack.getMaxStackSize());
+                            ++i;
+                        }
+                    }
+                }
+
+
+
 
                 break;
             case 2:
