@@ -20,8 +20,6 @@ import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
 import net.minecraft.item.Item;
 
-import java.util.ArrayList;
-
 @Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.MOD_VERSION)
 
 public class StarterKits {
@@ -55,7 +53,8 @@ public class StarterKits {
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         LogHelper.info("Registering packet handler");
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID.toLowerCase());
-        networkWrapper.registerMessage(PacketHandler.class, PacketHandler.class, Reference.GUIBUTTON_PACKET_ID, Side.SERVER);
+        networkWrapper.registerMessage(PacketHandler.Handler.class, PacketHandler.class, Reference.GUI_BUTTON_PACKET_ID, Side.CLIENT);
+        //networkWrapper.registerMessage(PacketHandler.class, PacketHandler.class, Reference.GUI_BUTTON_PACKET_ID, Side.SERVER);
         LogHelper.info("preInit Finished");
 
     }

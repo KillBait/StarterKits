@@ -36,5 +36,5 @@ public class Reference {
 
     // network packet ID
 
-    public static final int GUIBUTTON_PACKET_ID = 0;
+    public static final int GUI_BUTTON_PACKET_ID = 0;
 }
