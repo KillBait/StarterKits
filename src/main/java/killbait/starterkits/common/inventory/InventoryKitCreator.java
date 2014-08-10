@@ -40,13 +40,13 @@ public class InventoryKitCreator implements IInventory, INBTTaggable {
         if (parentItemStack != null) {
             save();
         }
-        LogHelper.info("onGuiSaved");
+        //LogHelper.info("onGuiSaved");
     }
 
     public ItemStack findParentItemStack(EntityPlayer entityPlayer) {
         if (NBTHelper.hasUUID(parentItemStack)) {
             UUID parentItemStackUUID = new UUID(parentItemStack.getTagCompound().getLong("UUIDMostSig"), parentItemStack.getTagCompound().getLong("UUIDLeastSig"));
-            LogHelper.info("size is" + entityPlayer.inventory.getSizeInventory());
+            //LogHelper.info("size is" + entityPlayer.inventory.getSizeInventory());
             for (int i = 0; i < entityPlayer.inventory.getSizeInventory(); i++) {
                 ItemStack itemStack = entityPlayer.inventory.getStackInSlot(i);
 
@@ -78,7 +78,7 @@ public class InventoryKitCreator implements IInventory, INBTTaggable {
 
         writeToNBT(nbtTagCompound);
         parentItemStack.setTagCompound(nbtTagCompound);
-        LogHelper.info("save");
+        //LogHelper.info("save");
     }
 
     @Override
@@ -105,7 +105,7 @@ public class InventoryKitCreator implements IInventory, INBTTaggable {
             }
         }
 
-        LogHelper.info("decrStackSize");
+        //LogHelper.info("decrStackSize");
         return itemStack;
     }
 

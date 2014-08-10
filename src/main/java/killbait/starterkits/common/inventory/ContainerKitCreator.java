@@ -163,7 +163,7 @@ public class ContainerKitCreator extends Container {
     public void saveInventory(EntityPlayer entityPlayer)
     {
 
-        LogHelper.info("SaveInventory");
+        //LogHelper.info("SaveInventory");
         inventoryKitCreator.onGuiSaved(entityPlayer);
 
     }
@@ -184,6 +184,14 @@ public class ContainerKitCreator extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         //LogHelper.info("changes");
+    }
+
+    public int getInvSize() {
+        return this.inventoryKitCreator.getSizeInventory();
+    }
+
+    public ItemStack getSlotContents(int slot) {
+        return this.inventoryKitCreator.getStackInSlot(slot);
     }
 
     public void dec()
@@ -208,7 +216,7 @@ public class ContainerKitCreator extends Container {
 
                 if (itemstack != null)
                 {
-                    LogHelper.info(" Container stack = " + itemstack + ", size =" + itemstack.stackSize);
+                    LogHelper.info(" Container stack = " + itemstack + ", size =" + itemstack.stackSize + ", Damage = " + itemstack.getItemDamage());
                     //f += (float)itemstack.stackSize / (float)Math.min(par0IInventory.getInventoryStackLimit(), itemstack.getMaxStackSize());
                     ++i;
                 }

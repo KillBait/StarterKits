@@ -5,10 +5,13 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import killbait.starterkits.common.handlers.KitManager;
 import killbait.starterkits.common.inventory.InventoryKitCreator;
 import killbait.starterkits.common.utils.LogHelper;
 import killbait.starterkits.common.utils.Reference;
 import net.minecraft.client.Minecraft;
+
+import static killbait.starterkits.common.handlers.KitManager.*;
 
 public class PacketHandler implements IMessage {
 
@@ -19,13 +22,13 @@ public class PacketHandler implements IMessage {
 
     public PacketHandler(int number) {
         this.number = number;
-        LogHelper.info("Packet is: " + this.number);
+        //LogHelper.info("Packet is: " + this.number);
 
     }
 
     public PacketHandler(InventoryKitCreator ikc) {
         this.kit = ikc;
-        LogHelper.info("Packet is: " + this.kit);
+        //LogHelper.info("Packet is: " + this.kit);
 
 
     }
@@ -47,12 +50,27 @@ public class PacketHandler implements IMessage {
 
         number = buf.readByte();
         //Reference.serverContainer.saveInventory(Minecraft.getMinecraft().thePlayer);
-        LogHelper.info("fromBytes = " + number);
+        //LogHelper.info("fromBytes = " + number);
 
         //Reference.serverContainer.getInventory();
         if (number == 1) {
-            Reference.serverContainer.dec();
-            Reference.serverContainer.listItems();
+            //Reference.serverContainer.dec();
+            //Reference.serverContainer.listItems();
+            if (Reference.selectedKit  <= 9 ) {
+                Reference.selectedKit++;
+            }
+
+        }
+
+        if (number == 3) {
+            if (Reference.selectedKit >= 2) {
+                Reference.selectedKit--;
+            }
+        }
+
+        if (number == 4) {
+            KitManager.ProcessNBT(Reference.selectedKit);
+            LogHelper.info("Set");
         }
 
     }
@@ -63,7 +81,7 @@ public class PacketHandler implements IMessage {
     public void toBytes(ByteBuf buf) {
 
         buf.writeByte(number);
-        LogHelper.info("toBytes = " + buf + ", contents = " + number);
+        //LogHelper.info("toBytes = " + buf + ", contents = " + number);
         //InventoryKitCreator.decrStackSize(int slotIndex, int decrementAmount);
 
     }

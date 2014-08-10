@@ -28,7 +28,7 @@ public class Reference {
 
     public static final int GUI_INDEX_KITCREATOR = 0;
     public static ContainerKitCreator serverContainer;
-
+    public static int selectedKit = 1;
 
     // Names of people allowed to use the KitCreator
 

@@ -45,7 +45,7 @@ public class GuiKitCreator extends GuiContainer {
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
         this.buttonList.add(new GuiButtonImage(1, i + 110, j + 24,14, 14,"",208,0,14,14,bgLocation));
-        this.buttonList.add(new GuiButtonImage(2, i + 90, j + 24,14, 14, "C",100,100,14,14,bgLocation));
+        //this.buttonList.add(new GuiButtonImage(2, i + 90, j + 24,14, 14, "C",100,100,14,14,bgLocation));
         this.buttonList.add(new GuiButtonImage(3, i + 70, j + 24,14, 14, "",194,0,14,14,bgLocation));
         this.buttonList.add(new GuiButton(4, i + 145, j + 21,30,20,"Set"));
     }
@@ -57,6 +57,7 @@ public class GuiKitCreator extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         fontRendererObj.drawString(StatCollector.translateToLocal("Select Kit Number"), 57, 10, 4210752);
         fontRendererObj.drawString(StatCollector.translateToLocal("Place Items, then click Set"), 15, ySize - 110 + 2, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal("" + Reference.selectedKit), 94, 28, 4210752);
     }
 
 
@@ -83,12 +84,12 @@ public class GuiKitCreator extends GuiContainer {
                 LogHelper.info("Button 0 Selected");
                 break;
             case 1:
-                LogHelper.info("Send to server: Button 1 Selected");
+                //LogHelper.info("Send to server: Button 1 Selected");
                 //StarterKits.networkWrapper.sendToServer(new GuiButtonPacket("Foobar"));
                 StarterKits.networkWrapper.sendToServer(new PacketHandler(button.id));
                 //StarterKits.networkWrapper.sendToServer(new GuiButtonPacket(this.inventoryKitCreator));
                 //this.inventoryKitCreator.decrStackSize(1, 1);
-                LogHelper.info(this.inventoryKitCreator.getSizeInventory());
+                /*LogHelper.info("Inventory Size = " + this.inventoryKitCreator.getSizeInventory());
                 if (this.inventoryKitCreator != null)
                 {
                     int i = 0;
@@ -105,7 +106,7 @@ public class GuiKitCreator extends GuiContainer {
                             ++i;
                         }
                     }
-                }
+                }*/
 
 
 
@@ -116,9 +117,11 @@ public class GuiKitCreator extends GuiContainer {
                 break;
             case 3:
                 LogHelper.info("Button 3 Selected");
+                StarterKits.networkWrapper.sendToServer(new PacketHandler(button.id));
                 break;
             case 4:
                 LogHelper.info("Button 4 Selected");
+                StarterKits.networkWrapper.sendToServer(new PacketHandler(button.id));
                 break;
             default:
                 LogHelper.info("default");
