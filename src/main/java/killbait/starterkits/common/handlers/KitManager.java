@@ -10,43 +10,70 @@ import net.minecraftforge.common.DimensionManager;
 
 import java.io.*;
 
+
+
 public class KitManager {
+
+    static File saveDir;
 
     public static void ProcessNBT(int kit) {
 
+        // Create Main Tree
+        NBTTagCompound main = new NBTTagCompound();
 
-        NBTTagCompound comp = new NBTTagCompound();
+        // Create and set Items Branch
+        NBTTagCompound list = new NBTTagCompound();
+        main.setTag("Items",list);
 
+        // Write each slots info to a new Tag in Items Branch
 
-
-        NBTTagList SlotList = new NBTTagList();
-        ItemStack item;
+        //ItemStack item;
+        String name;
 
         for (int j = 0; j < Reference.serverContainer.getInvSize(); ++j) {
 
-            LogHelper.info("Processing Kit " + kit + " Slot" + j + " : " + Reference.serverContainer.getSlotContents(j));
+            if (Reference.DEBUG) LogHelper.info("Processing Kit " + kit + " Slot" + j + " : " + Reference.serverContainer.getSlotContents(j));
             NBTTagCompound newtag = new NBTTagCompound();
-            item = Reference.serverContainer.getSlotContents(j);
-            newtag.setShort("Slot",(short) j);
+            ItemStack item = Reference.serverContainer.getSlotContents(j);
             if (item != null) {
                 item.writeToNBT(newtag);
                 newtag.setInteger("Damage" , item.getItemDamage());
-                //newtag.setInteger("Quantity", item.stackSize );
             }
+            if (j <= 9) {
+                name = "Slot0" + j;}
+            else {
+                name = "Slot" + j;
 
-            SlotList.appendTag(newtag);
+            }
+            list.setTag(name,newtag);
+
         }
 
-        comp.setTag("Items", SlotList);
-
-        saveNBT(kit,comp);
+        // Save all the NBT to disk
+        saveNBT(kit,main);
     }
 
 
 
     public static void saveNBT(int kitnumber, NBTTagCompound nbt) {
+
+        saveDir = new File(DimensionManager.getCurrentSaveRootDirectory(), "StaterKits");
+
+        try {
+
+            if (!saveDir.exists()) {
+                saveDir.mkdir();
+                LogHelper.info("Making Directory");
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+
         String fileName = "kitdata_"+kitnumber+".dat";
-        File myFile = new File(DimensionManager.getCurrentSaveRootDirectory(), fileName);
+        File myFile = new File(saveDir, fileName);
         //FileInputStream fis = null; //this makes it per-world
 
         //NBTTagCompound comp = new NBTTagCompound();
@@ -65,6 +92,7 @@ public class KitManager {
         }*/
         try {
             CompressedStreamTools.write(nbt, myFile);
+            LogHelper.info("Kit " + kitnumber + " data saved to disk");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,6 +107,10 @@ public class KitManager {
             e.printStackTrace();
         }*/
 
+
+    }
+
+    public static void LoadNBT(int kitnumber) {
 
     }
 
