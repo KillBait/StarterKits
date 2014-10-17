@@ -16,46 +16,51 @@ public class KitManager {
 
     static File saveDir;
 
-    public static void ProcessNBT(int kit) {
+    public static NBTTagCompound ProcessNBT(int kit) {
 
         // Create Main Tree
         NBTTagCompound main = new NBTTagCompound();
 
         // Create and set Items Branch
         NBTTagCompound list = new NBTTagCompound();
-        main.setTag("Items",list);
+        main.setTag("Items", list);
 
         // Write each slots info to a new Tag in Items Branch
 
         //ItemStack item;
         String name;
 
+        NBTTagCompound newtag = null;
         for (int j = 0; j < Reference.serverContainer.getInvSize(); ++j) {
 
-            if (Reference.DEBUG) LogHelper.info("Processing Kit " + kit + " Slot" + j + " : " + Reference.serverContainer.getSlotContents(j));
-            NBTTagCompound newtag = new NBTTagCompound();
+            if (Reference.DEBUG)
+                LogHelper.info("Processing Kit " + kit + " Slot" + j + " : " + Reference.serverContainer.getSlotContents(j));
+            newtag = new NBTTagCompound();
             ItemStack item = Reference.serverContainer.getSlotContents(j);
             if (item != null) {
                 item.writeToNBT(newtag);
-                newtag.setInteger("Damage" , item.getItemDamage());
+                newtag.setInteger("Damage", item.getItemDamage());
             }
             if (j <= 9) {
-                name = "Slot0" + j;}
-            else {
+                name = "Slot0" + j;
+            } else {
                 name = "Slot" + j;
 
             }
-            list.setTag(name,newtag);
+            list.setTag(name, newtag);
 
         }
 
         // Save all the NBT to disk
-        saveNBT(kit,main);
+        //saveNBT(kit,main);
+        return main;
     }
 
 
 
-    public static void saveNBT(int kitnumber, NBTTagCompound nbt) {
+    public static void saveNBT(int kitnumber) {
+
+        NBTTagCompound nbt = ProcessNBT(kitnumber);
 
         saveDir = new File(DimensionManager.getCurrentSaveRootDirectory(), "StaterKits");
 

@@ -69,7 +69,7 @@ public class PacketHandler implements IMessage {
         }
 
         if (number == 4) {
-            KitManager.ProcessNBT(Reference.selectedKit);
+            KitManager.saveNBT(Reference.selectedKit);
             LogHelper.info("Set");
         }
 
